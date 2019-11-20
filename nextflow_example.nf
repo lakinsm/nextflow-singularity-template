@@ -1,9 +1,5 @@
 #!/usr/bin/env nextflow
 
-TRIMMOMATIC = "${HOME}/tools/Trimmomatic-0.39/trimmomatic-0.39.jar"
-ADAPTERS = "${HOME}/tools/Trimmomatic-0.39/adapters/NexteraPE-PE.fa"
-
-
 Channel
     .fromFilePairs( params.reads, flat: true )
     .ifEmpty { error "Cannot find any reads matching: ${params.reads}" }
