@@ -1,0 +1,8 @@
+# Nextflow files
+.nextflow*
+work/*
+
+# Singularity files
+*.simg
+
+

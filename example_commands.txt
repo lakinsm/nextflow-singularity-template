@@ -1,0 +1,7 @@
+# To build the singularity image as a test, from the main repository directory
+sudo singularity build containers/example_singularity.simg containers/Singularity
+
+# To run the nextflow pipeline as written, from the main repository directory
+# As written in this template, this requires the above singularity command to be run first (build container)
+nextflow nextflow_example.nf --reads "containers/data/raw/*_R{1,2}*" --output "/mnt/temp/output" -w "/mnt/temp/work" -resume
+
