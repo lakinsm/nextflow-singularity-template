@@ -14,8 +14,7 @@ process QualityControl {
     input:
         set dataset_id, file(forward), file(reverse) from read_pairs
     output:
-        file "${dataset_id}_paired_R1.fastq"
-        file "${dataset_id}_paired_R2.fastq"
+        set dataset_id, file("${dataset_id}_paired_R1.fastq"), file("${dataset_id}_paired_R2.fastq") into (assembly_input)
     
     """
     java -jar ${TRIMMOMATIC} PE $forward $reverse \
@@ -24,12 +23,26 @@ process QualityControl {
       ${dataset_id}_paired_R2.fastq \
       ${dataset_id}_unpaired_R2.fastq \
       ILLUMINACLIP:${ADAPTERS}:2:30:10:3:TRUE \
-      LEADING:3 \
-      TRAILING:3 \
-      SLIDINGWINDOW:4:15 \
-      MINLEN:36
+      LEADING:${params.leading} \
+      TRAILING:${params.trailing} \
+      SLIDINGWINDOW:${params.slidingwindow} \
+      MINLEN:${params.minlen}
  
     """
 }
 
+process Assembly {
+	tag {dataset_id}
+	
+	publishDir "${params.output}/Assembly"
 
+	input:
+		set dataset_id, file(trimmed_forward), file(trimmed_reverse) from assembly_input
+	output:
+		file "${dataset_id}_example"
+
+
+	"""
+	touch "${dataset_id}_example"
+	"""
+}
